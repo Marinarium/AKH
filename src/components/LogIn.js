@@ -9,8 +9,8 @@ class LogIn extends Component {
   constructor() {
     super();
     this.state = {
-      userEmail: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите, пожалуйста email адрес")]),
-      userPassword: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите, пожалуйста пароль")])
+      userEmail: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите пожалуйста email адрес")]),
+      userPassword: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите пожалуйста пароль")])
     };
   }
 
@@ -59,10 +59,10 @@ class LogIn extends Component {
             value={userPassword.value}
             onChange={this.handleChange}
             type="password"
-            className={this.inputStyle}
+            className={userPassword.isValid?this.inputStyle:`${this.inputStyle} error`}
             isValid={userPassword.isValid}
             validationMessageLength={userPassword.validationMessage.length}
-            validationMessageText={userPassword.validationMessage[1]}
+            validationMessageText={userPassword.validationMessage[0]}
           />
           <Link />
           <Button handleClick={this.submit} />

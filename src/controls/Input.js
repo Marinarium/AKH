@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {ValidationInput, ValidateState, Rule, TypeOfRule} from "../helpers/ValidationHelper";
 
 class Input extends Component {
     static defaultProps = {

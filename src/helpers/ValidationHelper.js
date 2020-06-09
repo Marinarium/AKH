@@ -1,8 +1,8 @@
 export class ValidationInput {
     constructor( rules = [], isValid = true, value = "", validationMessage = []){
-        this.isValid = isValid;
-        this.value = value;
         this.rules = rules;
+        this.isValid = isValid;
+        this.value = value;        
         this.validationMessage = validationMessage;
     }
 }
