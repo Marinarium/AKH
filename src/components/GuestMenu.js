@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Navigation() {
+function GuestMenu() {
     return (
         <div className="header__mobile">
 			<div className="header__nav">
@@ -13,4 +13,4 @@ function Navigation() {
     )
 }
 
-export default Navigation
+export default GuestMenu

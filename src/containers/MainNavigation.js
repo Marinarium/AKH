@@ -1,18 +1,18 @@
 import React from 'react'
 import Logo from '../components/Logo'
-import Navigation from '../components/Navigation'
+import GuestMenu from '../components/GuestMenu'
 import BurgerMenu from '../BurgerMenu'
 
-function NavigationContainer() {
+function MainNavigation() {
     return (
         <div className="header">
             <div className="container">
                 <Logo />
-                <Navigation />
+                <GuestMenu />
                 <BurgerMenu />
             </div>
 		</div>
     )
 }
 
-export default NavigationContainer
+export default MainNavigation

@@ -1,12 +1,12 @@
 import React from 'react'
-import NavigationContainer from './containers/NavigationContainer'
-import SignInContainer from './containers/SignInContainer'
+import MainNavigation from './containers/MainNavigation'
+import Main  from './containers/Main'
 
 function App() {
   return (
     <div className="wrapper">
-            <NavigationContainer />
-            <SignInContainer />
+            <MainNavigation />
+            <Main />
 		</div>
   )
 }

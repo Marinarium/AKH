@@ -3,7 +3,7 @@ import Title from '../controls/Title'
 import LogIn from '../components/LogIn'
 import SuccessfulLogIn from '../components/SuccessfulLogIn'
 
-class SignInContainer extends Component{
+class Main extends Component{
     constructor() {
         super()
         this.state = {
@@ -41,6 +41,6 @@ class SignInContainer extends Component{
     }
 }
 
-export default SignInContainer 
+export default Main
 
 

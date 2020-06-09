@@ -1,71 +1,77 @@
-import React, {Component} from 'react'
-import Input from '../controls/Input'
-import Button from '../controls/Button'
-import Link from '../controls/Link'
+import React, { Component } from "react";
+import Input from "../controls/Input";
+import Button from "../controls/Button";
+import Link from "../controls/Link";
+import {ValidationInput, ValidateState, Rule, TypeOfRule} from "../helpers/ValidationHelper";
 
- class LogIn extends Component {
-        constructor() {
-            super()
-            this.state = {
-                userEmailInput: {
-                    isValid: false,
-                    userEmail: "user-error",
-                    inputStyle: "input input_weight"
-                },
-                userPasswordInput: {
-                    isValid: false,
-                    userPassword: "111-error",
-                    inputStyle: "input input_weight"
-                }               
-            }
-        }
-    
-        handleChange = (event) => {
-            const {name, value} = event.target
-            this.setState({
-                [name]: value
-            }) 
-        }
+class LogIn extends Component {
+  inputStyle="input input_weight";
+  constructor() {
+    super();
+    this.state = {
+      userEmail: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите, пожалуйста email адрес")]),
+      userPassword: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите, пожалуйста пароль")])
+    };
+  }
 
-        submit = () => {
-            //validation
-            //success event
-            //fail event
-            if(this.state.userEmailInput.userEmail==="user" && this.state.userPasswordInput.userPassword==="111") {
-                this.props.changeAuthorized(true)
-            } else {
-                this.props.changeAuthorized(false)
-                if(this.state.userEmailInput.userEmail!=="user") {
-                    console.log ("incorrect mail")
-                    this.setState({
-                        userEmailInput: { inputStyle: "input input_weight error"}
-                    })
-                }
-                if(this.state.userEmailInput.userEmail==="user" && this.state.userPasswordInput.userPassword!=="111") {
-                    console.log ("incorrect password")
-                    this.setState({
-                        userPasswordInput: { inputStyle: "input input_weight error"}
-                    })
-                } 
-            }
-        }    
-        
-        updateData = (value) => {
-            this.setState({ userLogIn: value })
-        }
+  handleChange = event => {
+    const { name, value } = event.target;
+    let input = this.state[name];
+    this.setState({
+      [name]: new ValidationInput(input.rules, input.isValid, value, input.validationMessage)
+    });
+  };
 
-    render() {  
-        return (
-            <div className="form form_mini">
-                <form>
-                    <Input label="Email" name="userEmail" value={this.state.userEmailInput.userEmail} onChange={this.handleChange} className={this.state.userEmailInput.inputStyle}/>
-                    <Input label="Пароль" name="userPassword" value={this.state.userPasswordInput.userPassword} onChange={this.handleChange} type="password" className={this.state.userPasswordInput.inputStyle}/>
-                    <Link />
-                    <Button handleClick={this.submit} />
-                </form>
-            </div>
-        )
-        }
+  submit = () => {
+    //validation
+    let validationResult = ValidateState(this.state);
+    this.setState({...validationResult.state})
+    if(validationResult.isValid) {
+      //return;
+      this.props.changeAuthorized(true);
+    } else {
+      this.props.changeAuthorized(false);
+    }
+  };
+
+  updateData = value => {
+    this.setState({ userLogIn: value });
+  };
+
+  render() {
+    const {userEmail, userPassword} = this.state;
+    return (
+      <div className="form form_mini">
+        <form /*onSubmit={this.handleSubmit}*/>
+          <Input
+            label="Email"
+            name="userEmail"
+            value={userEmail.value}
+            onChange={this.handleChange}
+            className={userEmail.isValid?this.inputStyle:`${this.inputStyle} error`}
+            isValid={userEmail.isValid}
+            validationMessageLength={userEmail.validationMessage.length}
+            validationMessageText={userEmail.validationMessage[0]}
+          />
+          <Input
+            label="Пароль"
+            name="userPassword"
+            value={userPassword.value}
+            onChange={this.handleChange}
+            type="password"
+            className={this.inputStyle}
+            isValid={userPassword.isValid}
+            validationMessageLength={userPassword.validationMessage.length}
+            validationMessageText={userPassword.validationMessage[1]}
+          />
+          <Link />
+          <Button handleClick={this.submit} />
+        </form>
+      </div>
+    );
+  }
 }
 
-export default LogIn
+export default LogIn;
+
+
