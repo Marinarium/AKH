@@ -1,5 +1,6 @@
+//Создаём конструктор, который будет создавать объект, с определёнными значениями (userEmail: new ValidationInput())
 export class ValidationInput {
-    constructor( rules = [], isValid = true, value = "", validationMessage = []){
+    constructor( rules = [], isValid = true, value = "", validationMessage = []){ //значения
         this.rules = rules;
         this.isValid = isValid;
         this.value = value;        
@@ -7,50 +8,58 @@ export class ValidationInput {
     }
 }
 
+//Создаём конструктор, который будет принматься в ValidationInput, а именно в rules = [], 
+//в нём нужно указать type, message  -> 
+//type - это тип проверки, который берется из TypeOfRule(например: TypeOfRule.REQUIRED, )
+//message - это строка, которая будет выводится на экран в случае провала валидации
 export class Rule {
     constructor(type, message){
         this.type = type;
-        this.parameter = "";
+        this.parameter = ""; //------????????
         this.message = message;
         this.isValid = true;
     }
 }
 
+//Типы проверок для конструктора Rule
 export const TypeOfRule = {
     REQUIRED:"REQUIRED",
     REGEX:"REGEX"
 
 }
 
+//Функция валидации которая принимает ?ЭЛЕМЕНТ ИЗ STATE? и поределяет принадлежит ли принимаемый объект к классу ValidationInput
 export function ValidateInput(input) {
-    if(input instanceof ValidationInput) {
-        input.isValid = true
-        input.validationMessage = []
-        input.rules.forEach((rule) => {
-            let result = ValidateRule(rule, input.value)
-            if(!result){
-                input.isValid = false;
-                input.validationMessage.push(rule.message);
+    if(input instanceof ValidationInput) {  //Оператор instanceof позволяет проверить, к какому классу принадлежит объект, вернёт true, если obj принадлежит классу.
+        input.isValid = true //Если объект от ValidationInput, то его характеристика isValid = true
+        input.validationMessage = [] //Массив из сообщений
+        input.rules.forEach((rule) => { //forEach для перебора массива rules, берем отдельный элемент и смотрим 
+            let result = ValidateRule(rule, input.value) //проходит ли валидацию
+            if(!result){  //если не проходит
+                input.isValid = false; // то isValid
+                input.validationMessage.push(rule.message); // и выводи сообщение из массива сообщений о непрошедшей валидации
             }
         })
-        return input;
+        return input; // возвращаем
     }
 }
 
+//Функция принимает тип проверки и значение из поля и проводит ВАЛИДАЦИЮ
 export function ValidateRule(rule, value) {
-    if(rule instanceof Rule) {
+    if(rule instanceof Rule) { //вернёт true, если obj принадлежит классу Rule
         switch(rule.type) {
-            case  TypeOfRule.REQUIRED:
-                if(value) {
-                    rule.isValid = true;
-                    return true;
+            case  TypeOfRule.REQUIRED: //Если тип проверки REQUIRED
+                if(value) {            //Если value - true 
+                    rule.isValid = true; 
+                    console.log(rule.type);
+                    return true;  //Возвращаем в ValidateInput
                 } else {
                     rule.isValid = false;
                     return false;
                 }
-            case TypeOfRule.REGEX:
-                if(rule.parameter){
-                    return value.match(rule.parameter);
+            case TypeOfRule.REGEX: //Если тип проверки REGEX
+                if(rule.parameter){       //value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i); Пример regex для email
+                    return value.match(rule.parameter); //Метод str.match(regexp) ищет совпадения с regexp в строке str. При отсутствии совпадений возвращается null
                 } else {
                     console.log("required parameter")
                     return false;
@@ -61,17 +70,18 @@ export function ValidateRule(rule, value) {
     }
 }
 
-export function ValidateState(state) {
-    let inputs = [];
-    for (const property in state) {
-        if(state[property] instanceof ValidationInput) {
-            const result = ValidateInput(state[property]);
-            inputs.push(result);
-            state[property] = result;
+//Функция берёт state из компонента (например=> userEmail: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите пожалуйста email адрес")]),)
+export function ValidateState(state) { 
+    let inputs = [];                     //создаёт массив из элементов state
+    for (const property in state) {      //перебераем массив элементов
+        if(state[property] instanceof ValidationInput) { //если элемент создан на основе ValidationInput
+            const result = ValidateInput(state[property]); //засовываем его значение в result
+            inputs.push(result); //создаём массив из элементов требующих валидации
+            state[property] = result; //---------ЗАЧЕМ ЭТА СТРОКА----------
         }
     }
-    const isValid = inputs.every((item) => {
+    const isValid = inputs.every((item) => { //every проверяет каждый элемент массива и если ВСЕ true - вернет true
         return item.isValid;
     })
-    return {state, isValid};
+    return {state, isValid}; //----------????
 }
