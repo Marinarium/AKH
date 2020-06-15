@@ -1,11 +1,14 @@
-import React from 'react'
+import React, {Component} from 'react'
 
-function Link() {
-    return (
-        <div className="form__link">
-		    <a href="./">Забыли пароль?</a>
-		</div>
-    )
+class Link extends Component {
+
+    render() {
+        return (
+            <div className={this.props.className}>
+                <a href="./">{this.props.text}</a>
+            </div>
+        )
+    }
 }
 
 export default Link

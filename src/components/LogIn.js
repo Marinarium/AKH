@@ -9,7 +9,9 @@ class LogIn extends Component {
   constructor() {
     super();
     this.state = {
-      userEmail: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите пожалуйста email адрес")]),
+      userEmail: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите пожалуйста email адрес"),
+                                      new Rule(TypeOfRule.REGEX, "Введите пожалуйста email", /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i),                                                                   
+      ]),
       userPassword: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите пожалуйста пароль")])
     };
   }
@@ -64,8 +66,8 @@ class LogIn extends Component {
             validationMessageLength={userPassword.validationMessage.length}
             validationMessageText={userPassword.validationMessage[0]}
           />
-          <Link />
-          <Button handleClick={this.submit} />
+          <Link className="form__link" text="Забыли пароль?"/>
+          <Button handleClick={this.submit} value="Войти"/>
         </form>
       </div>
     );

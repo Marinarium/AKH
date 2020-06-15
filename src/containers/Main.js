@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Title from '../controls/Title'
 import LogIn from '../components/LogIn'
+//import UserRegistration from '../components/UserRegistration'
 import SuccessfulLogIn from '../components/SuccessfulLogIn'
 
 class Main extends Component{

@@ -11,7 +11,7 @@ class Button extends Component {
                 <input 
                     type="button" 
                     className="button" 
-                    value="Войти" 
+                    value={this.props.value}
                     onClick={this.props.handleClick}
                 />
             </div>

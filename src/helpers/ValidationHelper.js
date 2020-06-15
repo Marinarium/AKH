@@ -1,4 +1,4 @@
-//Создаём конструктор, который будет создавать объект, с определёнными значениями (userEmail: new ValidationInput())
+//Создаём конструктор, который будет принимать объект, с определёнными значениями (userEmail: new ValidationInput())
 export class ValidationInput {
     constructor( rules = [], isValid = true, value = "", validationMessage = []){ //значения
         this.rules = rules;
@@ -13,9 +13,9 @@ export class ValidationInput {
 //type - это тип проверки, который берется из TypeOfRule(например: TypeOfRule.REQUIRED, )
 //message - это строка, которая будет выводится на экран в случае провала валидации
 export class Rule {
-    constructor(type, message){
+    constructor(type, message, parameter = ""){
         this.type = type;
-        this.parameter = ""; //------????????
+        this.parameter = parameter; //------????????
         this.message = message;
         this.isValid = true;
     }
@@ -28,11 +28,27 @@ export const TypeOfRule = {
 
 }
 
+//Функция берёт state из компонента (например=> userEmail: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите пожалуйста email адрес")]),)
+export function ValidateState(state) { 
+    let inputs = [];                     //создаёт массив из элементов state
+    for (const property in state) {      //перебераем массив элементов
+        if(state[property] instanceof ValidationInput) { //если элемент создан на основе ValidationInput
+            const result = ValidateInput(state[property]); //засовываем его значение в result
+            inputs.push(result); //создаём массив из элементов требующих валидации
+            state[property] = result; //---------ЗАЧЕМ ЭТА СТРОКА----------
+        }
+    }
+    const isValid = inputs.every((item) => { //every проверяет каждый элемент массива и если ВСЕ true - вернет true
+        return item.isValid;
+    })
+    return {state, isValid}; //----------????
+}
+
 //Функция валидации которая принимает ?ЭЛЕМЕНТ ИЗ STATE? и поределяет принадлежит ли принимаемый объект к классу ValidationInput
 export function ValidateInput(input) {
     if(input instanceof ValidationInput) {  //Оператор instanceof позволяет проверить, к какому классу принадлежит объект, вернёт true, если obj принадлежит классу.
-        input.isValid = true //Если объект от ValidationInput, то его характеристика isValid = true
-        input.validationMessage = [] //Массив из сообщений
+        input.isValid = true //Если объект от ValidationInput, то его характеристика isValid = true, сбрасываем предыдущий результат
+        input.validationMessage = [] //Массив из сообщений, ошибки которые нашли стираем
         input.rules.forEach((rule) => { //forEach для перебора массива rules, берем отдельный элемент и смотрим 
             let result = ValidateRule(rule, input.value) //проходит ли валидацию
             if(!result){  //если не проходит
@@ -70,18 +86,3 @@ export function ValidateRule(rule, value) {
     }
 }
 
-//Функция берёт state из компонента (например=> userEmail: new ValidationInput([new Rule(TypeOfRule.REQUIRED, "Введите пожалуйста email адрес")]),)
-export function ValidateState(state) { 
-    let inputs = [];                     //создаёт массив из элементов state
-    for (const property in state) {      //перебераем массив элементов
-        if(state[property] instanceof ValidationInput) { //если элемент создан на основе ValidationInput
-            const result = ValidateInput(state[property]); //засовываем его значение в result
-            inputs.push(result); //создаём массив из элементов требующих валидации
-            state[property] = result; //---------ЗАЧЕМ ЭТА СТРОКА----------
-        }
-    }
-    const isValid = inputs.every((item) => { //every проверяет каждый элемент массива и если ВСЕ true - вернет true
-        return item.isValid;
-    })
-    return {state, isValid}; //----------????
-}

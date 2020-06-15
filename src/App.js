@@ -1,13 +1,16 @@
 import React from 'react'
 import MainNavigation from './containers/MainNavigation'
-import Main  from './containers/Main'
+import Content  from './containers/Content'
+import {BrowserRouter} from 'react-router-dom'
 
 function App() {
   return (
-    <div className="wrapper">
+    <BrowserRouter>
+      <div className="wrapper">
             <MainNavigation />
-            <Main />
-		</div>
+            <Content />
+      </div>
+    </BrowserRouter>
   )
 }
 
